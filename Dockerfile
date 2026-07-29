@@ -54,6 +54,6 @@ RUN mkdir -p bootstrap/cache
 RUN chmod -R 777 storage
 RUN chmod -R 777 bootstrap/cache
 
-EXPOSE 80
+ENV SERVER_NAME=:80
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+EXPOSE 80
