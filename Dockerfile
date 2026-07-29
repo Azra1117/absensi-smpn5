@@ -1,4 +1,20 @@
-FROM dunglas/frankenphp:1.4-php8.2
+# ==========================
+# Stage 1 - Build frontend
+# ==========================
+FROM node:22 AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+# ==========================
+# Stage 2 - PHP
+# ==========================
+FROM dunglas/frankenphp:php8.2
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -14,7 +30,6 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install \
         gd \
         zip \
-        pdo \
         pdo_mysql \
         bcmath \
         exif
@@ -27,12 +42,11 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN npm install
-RUN npm run build
+COPY --from=frontend /app/public/build ./public/build
 
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-RUN php artisan view:cache || true
+RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs
+
+RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 
