@@ -12,40 +12,53 @@ class GoogleSheetService
     protected string $spreadsheetId;
 
     public function __construct()
-{
-    $client = new Client();
+    {
+        $client = new Client();
 
-    $client->setApplicationName('Absensi SMPN 5');
-    $client->setScopes([Sheets::SPREADSHEETS]);
+        $client->setApplicationName('Absensi SMPN 5');
+        $client->setScopes([Sheets::SPREADSHEETS]);
 
-    if (app()->environment('production')) {
+        if (app()->environment('production')) {
 
-        $path = storage_path('app/google/credentials.json');
+            $path = storage_path('app/google/credentials.json');
 
-        if (!file_exists($path)) {
+            if (!file_exists($path)) {
 
-            if (!is_dir(dirname($path))) {
-                mkdir(dirname($path), 0777, true);
+                if (!is_dir(dirname($path))) {
+                    mkdir(dirname($path), 0777, true);
+                }
+
+                file_put_contents($path, env('GOOGLE_CREDENTIALS_JSON'));
             }
 
-            file_put_contents(
-                $path,
-                env('GOOGLE_CREDENTIALS_JSON')
+            $client->setAuthConfig($path);
+
+        } else {
+
+            $client->setAuthConfig(
+                storage_path('app/google/credentials.json')
             );
+
         }
 
-        $client->setAuthConfig($path);
+        $this->service = new Sheets($client);
 
-    } else {
-
-        $client->setAuthConfig(
-            storage_path('app/google/credentials.json')
-        );
-
+        $this->spreadsheetId = env('GOOGLE_SPREADSHEET_ID');
     }
 
-    $this->service = new Sheets($client);
+    public function append(array $row)
+    {
+        $body = new ValueRange([
+            'values' => [$row]
+        ]);
 
-    $this->spreadsheetId = env('GOOGLE_SPREADSHEET_ID');
-}
+        $this->service->spreadsheets_values->append(
+            $this->spreadsheetId,
+            'Absensi SMPN 5!A:G',
+            $body,
+            [
+                'valueInputOption' => 'RAW'
+            ]
+        );
+    }
 }
