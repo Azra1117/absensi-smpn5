@@ -1,5 +1,5 @@
 # ==========================
-# Stage 1 - Build frontend
+# Stage 1 - Build Frontend
 # ==========================
 FROM node:22 AS frontend
 
@@ -14,7 +14,7 @@ RUN npm run build
 # ==========================
 # Stage 2 - PHP
 # ==========================
-FROM dunglas/frankenphp:php8.2
+FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -28,9 +28,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
+        pdo_mysql \
         gd \
         zip \
-        pdo_mysql \
         bcmath \
         exif
 
@@ -44,16 +44,18 @@ RUN composer install --no-dev --optimize-autoloader
 
 COPY --from=frontend /app/public/build ./public/build
 
-RUN mkdir -p storage/framework/cache
-RUN mkdir -p storage/framework/views
-RUN mkdir -p storage/framework/sessions
-RUN mkdir -p storage/framework/testing
-RUN mkdir -p storage/logs
-RUN mkdir -p bootstrap/cache
+RUN mkdir -p storage/framework/cache \
+    storage/framework/views \
+    storage/framework/sessions \
+    storage/framework/testing \
+    storage/logs \
+    bootstrap/cache
 
-RUN chmod -R 777 storage
-RUN chmod -R 777 bootstrap/cache
+RUN chmod -R 777 storage bootstrap/cache
 
-ENV SERVER_NAME=:80
+EXPOSE 10000
 
-EXPOSE 80
+CMD php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan view:clear && \
+    php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
