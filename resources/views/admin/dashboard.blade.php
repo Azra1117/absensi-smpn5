@@ -45,6 +45,20 @@
     opacity:.25;
 }
 
+.quick-card{
+    background:#fff;
+    border-radius:15px;
+    padding:20px;
+    text-decoration:none;
+    color:#111827;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.quick-card:hover{
+    transform:translateY(-5px);
+}
+
 </style>
 
 <div class="dashboard-header">
@@ -106,15 +120,17 @@
         <h4>Absensi Hari Ini</h4>
         <h1>{{ $absensi }}</h1>
     </div>
+</div>
 
 <div style="margin-top:35px;">
 
     <h3 style="margin-bottom:20px;color:#0F172A;">
-      </h3>  ⚡ Akses Cepat
+       ⚡ Akses Cepat
+    </h3> 
 
     <div class="cards">
 
-        <a href="{{ route('guru.create') }}" class="card" style="text-decoration:none;">
+        <a href="{{ route('guru.create') }}" class="quick-card" style="text-decoration:none;">
             <i class="bi bi-person-plus-fill"></i>
             <h4>Tambah Guru</h4>
             <p style="margin-top:10px;color:#64748B;">
