@@ -523,14 +523,51 @@ font-size:20px;
 </style>
 
 </head>
+<script>
 
+const sidebar = document.querySelector('.sidebar');
+
+const overlay = document.getElementById('sidebarOverlay');
+
+const menu = document.getElementById('menuToggle');
+
+menu?.addEventListener('click',()=>{
+
+    sidebar.classList.toggle('show');
+
+    overlay.classList.toggle('show');
+
+});
+
+overlay?.addEventListener('click',()=>{
+
+    sidebar.classList.remove('show');
+
+    overlay.classList.remove('show');
+
+});
+
+window.addEventListener('resize',()=>{
+
+    if(window.innerWidth>768){
+
+        sidebar.classList.remove('show');
+
+        overlay.classList.remove('show');
+
+    }
+
+});
+
+</script>
 <body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="sidebar">
 
 <div class="logo">
 
-<img src="{{ asset('images/logo.jpg') }}" alt="Logo">
+<img src="{{ asset('images/logo.jpg') }}" class="img-fluid">
 
 <h3>SMPN 5</h3>
 
@@ -615,6 +652,34 @@ class="{{ request()->is('laporan*') ? 'active' : '' }}">
 <div class="content">
 
 <div class="navbar">
+
+    <div class="d-flex align-items-center gap-3">
+
+        <button class="menu-toggle d-md-none" id="menuToggle">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div>
+            <div class="page-title">
+                Halo, {{ Auth::user()->name }} 👋
+            </div>
+
+            <div class="page-subtitle">
+                Selamat datang di Sistem Monitoring Absensi SMP Negeri 5 Tambun Utara
+            </div>
+        </div>
+
+    </div>
+
+    <form action="{{ url('/logout') }}" method="POST">
+        @csrf
+        <button class="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </button>
+    </form>
+
+</div>
 
 <div>
 
@@ -834,6 +899,89 @@ CUSTOM SCROLL
 
 }
 
+.table{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.table th{
+
+    white-space:nowrap;
+
+}
+
+.table-responsive{
+
+    border-radius:18px;
+
+}
+
+.btn{
+
+    min-height:45px;
+
+}
+
+@media(max-width:768px){
+
+.btn{
+
+    width:100%;
+
+    margin-bottom:10px;
+
+}
+
+}
+
+.form-control,
+.form-select{
+
+    min-height:48px;
+
+    font-size:15px;
+
+}
+
+label{
+
+    margin-bottom:7px;
+
+    font-weight:600;
+
+}
+
+.card-modern{
+
+transition:.25s ease;
+
+}
+
+.card-modern:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 18px 40px rgba(15,23,42,.08);
+
+}
+
+button:active{
+
+transform:scale(.98);
+
+}
+
 /* ===========================
 RESPONSIVE
 =========================== */
@@ -853,6 +1001,82 @@ text-align:center;
 }
 
 </style>
+/* ===========================
+   MOBILE SIDEBAR
+=========================== */
+
+.menu-toggle{
+
+    width:45px;
+    height:45px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563EB;
+
+    color:white;
+
+    font-size:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.45);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:998;
+}
+
+.sidebar-overlay.show{
+
+    opacity:1;
+
+    visibility:visible;
+}
+
+.sidebar{
+
+    z-index:999;
+}
+
+@media(max-width:768px){
+
+    .navbar{
+
+        gap:15px;
+
+    }
+
+    .page-subtitle{
+
+        display:none;
+
+    }
+
+    .logout-btn{
+
+        padding:10px 14px;
+
+    }
+
+}
 
 </body>
 </html>

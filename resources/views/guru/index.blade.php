@@ -11,7 +11,15 @@ style="background:#2563eb;color:white;padding:10px 20px;border-radius:8px;text-d
 + Tambah Guru
 </a>
 
-<table class="table">
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+...
+
+</table>
+
+</div>
 
 <tr>
 

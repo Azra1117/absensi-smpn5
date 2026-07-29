@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <div class="card">
+    <div class="stat-card">
         <div class="card-body">
 
             <form action="{{ route('absensi.store') }}" method="POST">

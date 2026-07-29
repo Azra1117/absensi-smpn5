@@ -13,19 +13,19 @@
     margin-top:30px;
 }
 
-.card{
-    background:white;
-    border-radius:18px;
-    padding:25px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-    transition:.3s;
-    overflow:hidden;
+.stat-card{
+    background:#fff;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 10px 25px rgba(15,23,42,.06);
+    transition:.25s;
     position:relative;
+    overflow:hidden;
 }
 
-.card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 20px 40px rgba(37,99,235,.15);
+.stat-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 35px rgba(37,99,235,.12);
 }
 
 .card h4{
@@ -43,20 +43,140 @@
     float:right;
     color:#2563EB;
     opacity:.25;
+    <div class="stat-card">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+
+            <h4>Jumlah Guru</h4>
+
+            <h1>{{ number_format($guru) }}</h1>
+
+            <small>Guru Aktif</small>
+
+        </div>
+
+        <div class="stat-icon">
+
+            <i class="bi bi-person-video3"></i>
+
+        </div>
+
+    </div>
+
+</div>
 }
 
 .quick-card{
-    background:#fff;
-    border-radius:15px;
-    padding:20px;
-    text-decoration:none;
-    color:#111827;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    transition:.3s;
+
+display:block;
+
+background:white;
+
+padding:22px;
+
+border-radius:20px;
+
+transition:.25s;
+
+box-shadow:0 8px 25px rgba(15,23,42,.05);
+
 }
 
 .quick-card:hover{
-    transform:translateY(-5px);
+
+transform:translateY(-5px);
+
+}
+
+.stat-card::before{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+top:0;
+
+bottom:0;
+
+width:6px;
+
+background:#2563EB;
+
+}
+
+.stat-icon{
+
+width:70px;
+height:70px;
+
+border-radius:18px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#EFF6FF;
+
+}
+
+.stat-icon i{
+
+font-size:34px;
+
+opacity:1;
+
+}
+
+.dashboard-clock{
+
+background:white;
+
+padding:20px;
+
+border-radius:20px;
+
+box-shadow:0 10px 25px rgba(15,23,42,.05);
+
+min-width:240px;
+
+text-align:center;
+
+}
+
+.dashboard-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+@media(max-width:768px){
+
+.dashboard-clock{
+
+width:100%;
+
+}
+
+.dashboard-title{
+
+font-size:24px;
+
+}
+
 }
 
 </style>
@@ -88,34 +208,34 @@
 
 <div class="cards">
 
-    <div class="card">
+    <div class="stat-card">
         <i class="bi bi-person-video3" style="color:#2563EB;"></i>
         <h4>Jumlah Guru</h4>
-        <h1>{{ $guru }}</h1>
+        <h1>{{ number_format($guru) }}</h1>
         <small style="color:#94A3B8;">
             Guru Aktif
         </small>
     </div>
 
-    <div class="card">
+    <div class="stat-card">
         <i class="bi bi-person-badge" style="color:#22C55E;"></i>
         <h4>Jumlah Staff</h4>
         <h1>{{ $staff }}</h1>
     </div>
 
-    <div class="card">
+    <div class="stat-card">
         <i class="bi bi-people" style="color:#8B5CF6;"></i>
         <h4>Jumlah Kelas</h4>
         <h1>{{ $kelas }}</h1>
     </div>
 
-    <div class="card">
+    <div class="stat-card">
         <i class="bi bi-people"></i>
         <h4>Jumlah Siswa</h4>
         <h1>{{ $siswa }}</h1>
     </div>
 
-    <div class="card">
+    <div class="stat-card">
         <i class="bi bi-calendar-check" style="color:#EF4444;"></i>
         <h4>Absensi Hari Ini</h4>
         <h1>{{ $absensi }}</h1>
@@ -128,7 +248,7 @@
        ⚡ Akses Cepat
     </h3> 
 
-    <div class="cards">
+    <div class="stat-card">
 
         <a href="{{ route('guru.create') }}" class="quick-card" style="text-decoration:none;">
             <i class="bi bi-person-plus-fill"></i>
