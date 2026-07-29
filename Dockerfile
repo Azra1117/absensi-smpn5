@@ -44,9 +44,15 @@ RUN composer install --no-dev --optimize-autoloader
 
 COPY --from=frontend /app/public/build ./public/build
 
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs
+RUN mkdir -p storage/framework/cache
+RUN mkdir -p storage/framework/views
+RUN mkdir -p storage/framework/sessions
+RUN mkdir -p storage/framework/testing
+RUN mkdir -p storage/logs
+RUN mkdir -p bootstrap/cache
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN chmod -R 777 storage
+RUN chmod -R 777 bootstrap/cache
 
 EXPOSE 80
 
