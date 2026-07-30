@@ -94,6 +94,15 @@ Route::get('/laporan', [LaporanController::class, 'index'])
 
     Route::resource('absensi', AbsensiController::class);
 
+    /*
+    |--------------------------------------------------------------------------
+    | Rekap Absensi
+    |--------------------------------------------------------------------------
+    */
+    
+    Route::get('/rekap-absensi', [RekapController::class, 'index'])
+        ->name('rekap.index');
+
 });
     Route::get('/absensi/data/{tanggal}/{shift}/{kelas}', [AbsensiController::class, 'getAbsensi'])
     ->name('absensi.data');
