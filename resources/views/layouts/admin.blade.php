@@ -557,11 +557,32 @@ RESPONSIVE
 
         </a>
 
+        <div class="menu-title mt-4">
+             Analitik
+        </div>
+
         <a href="{{ route('laporan.index') }}"
            class="{{ request()->is('laporan*') ? 'active' : '' }}">
 
             <i class="bi bi-bar-chart-line"></i>
             <span>Laporan</span>
+
+        </a>
+
+        <a href="{{ route('kalender.index') }}"
+   class="{{ request()->is('kalender-akademik*') ? 'active' : '' }}">
+
+    <i class="bi bi-calendar-event"></i>
+
+    <span>Kalender Akademik</span>
+
+</a>
+
+        <a href="{{ route('rekap.index') }} "
+        class="{{ request()->is('rekap-absensi*') ? 'active' : ' ' }}">   
+
+        <i class="bi bi-clipboard-data"></i >
+        <sp>Rekap Absensi</sp an>
 
         </a>
 

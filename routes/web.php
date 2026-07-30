@@ -9,6 +9,8 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\ImportSiswaController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\RekapController;
+use App\Http\Controllers\KalenderAkademikController;
 
 use App\Models\Guru;
 use App\Models\Staff;
@@ -99,9 +101,27 @@ Route::get('/laporan', [LaporanController::class, 'index'])
     | Rekap Absensi
     |--------------------------------------------------------------------------
     */
-    
+
     Route::get('/rekap-absensi', [RekapController::class, 'index'])
         ->name('rekap.index');
+    
+    Route::get('/rekap-absensi/export/excel', [RekapController::class, 'exportExcel'])
+    ->name('rekap.export.excel');
+
+    Route::get('/rekap-absensi/export/pdf', [RekapController::class, 'exportPdf'])
+    ->name('rekap.export.pdf');
+    
+    Route::get('/kalender-akademik', [KalenderAkademikController::class, 'index'])
+    ->name('kalender.index');
+
+    Route::post('/kalender-akademik/generate', [KalenderAkademikController::class, 'generate'])
+    ->name('kalender.generate');
+
+    Route::get('/kalender-akademik/{kalender}/edit', [KalenderAkademikController::class, 'edit'])
+    ->name('kalender.edit');
+
+    Route::put('/kalender-akademik/{kalender}', [KalenderAkademikController::class, 'update'])
+    ->name('kalender.update');
 
 });
     Route::get('/absensi/data/{tanggal}/{shift}/{kelas}', [AbsensiController::class, 'getAbsensi'])
