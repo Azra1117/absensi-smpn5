@@ -76,12 +76,7 @@ if ($kelasId) {
     $queryKelas->where('id', $kelasId);
 }
 
-$totalHariBelajar = $jumlahSiswa * $hariEfektif;
-
-$hadirKelas = max(
-    0,
-    $totalHariBelajar - ($izinKelas + $sakitKelas + $alphaKelas)
-); {
+foreach ($queryKelas->orderBy('nama_kelas')->get() as $kls) {
 
     $jumlahSiswa = Siswa::where('kelas_id', $kls->id)->count();
 
@@ -105,18 +100,20 @@ $hadirKelas = max(
 
     $totalHariBelajar = $jumlahSiswa * $hariEfektif;
 
-$hadirKelas = max(
-    0,
-    $totalHariBelajar - ($izinKelas + $sakitKelas + $alphaKelas)
-);
+    $hadirKelas = max(
+        0,
+        $totalHariBelajar - ($izinKelas + $sakitKelas + $alphaKelas)
+    );
 
-$persentase = $totalHariBelajar > 0
-    ? round(($hadirKelas / $totalHariBelajar) * 100, 2)
-    : 0;
+    $persentase = $totalHariBelajar > 0
+        ? round(($hadirKelas / $totalHariBelajar) * 100, 2)
+        : 0;
 
     $rekapKelas[] = [
         'kelas' => $kls->nama_kelas,
         'total' => $jumlahSiswa,
+        'hari_efektif' => $hariEfektif,
+        'total_kehadiran' => $totalHariBelajar,
         'hadir' => $hadirKelas,
         'izin' => $izinKelas,
         'sakit' => $sakitKelas,
@@ -156,18 +153,6 @@ $persentaseTotal = $totalKehadiran > 0
 'totalAlpha',
 'totalKehadiran',
 'persentaseTotal'
-));
-return view('rekap.index', compact(
-    'rekapKelas',
-    'bulan',
-    'tahun',
-    'hariEfektif',
-    'totalHadir',
-'totalIzin',
-'totalSakit',
-'totalAlpha',
-'totalKehadiran',
-'persentaseTotal',
 ));
 }
 public function exportExcel(Request $request)
