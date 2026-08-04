@@ -122,7 +122,16 @@ foreach ($queryKelas->orderBy('nama_kelas')->get() as $kls) {
     ];
 }
 
-    $hadir = max(0, $totalSiswa - ($izin + $sakit + $alpha));
+    $totalKehadiranSemua = $totalSiswa * $hariEfektif;
+
+$hadir = max(
+    0,
+    $totalKehadiranSemua - ($izin + $sakit + $alpha)
+);
+
+$persentaseKeseluruhan = $totalKehadiranSemua > 0
+    ? round(($hadir / $totalKehadiranSemua) * 100, 2)
+    : 0;
 
     $totalHadir = collect($rekapKelas)->sum('hadir');
 $totalIzin = collect($rekapKelas)->sum('izin');
@@ -133,6 +142,61 @@ $totalKehadiran = collect($rekapKelas)->sum('total_kehadiran');
 $persentaseTotal = $totalKehadiran > 0
     ? round(($totalHadir / $totalKehadiran) * 100, 2)
     : 0;
+
+    $grafikBulanan = [];
+
+for ($i = 1; $i <= 12; $i++) {
+
+    $hariEfektifBulanan = \App\Models\KalenderAkademik::whereYear('tanggal', $tahun)
+        ->whereMonth('tanggal', $i)
+        ->where('status', 'Efektif')
+        ->count();
+
+    $querySiswaBulanan = Siswa::query();
+
+    if ($tingkat) {
+        $querySiswaBulanan->whereHas('kelas', function ($q) use ($tingkat) {
+            $q->where('tingkat', $tingkat);
+        });
+    }
+
+    if ($kelasId) {
+        $querySiswaBulanan->where('kelas_id', $kelasId);
+    }
+
+    $jumlahSiswa = $querySiswaBulanan->count();
+
+    $totalHariBelajar = $jumlahSiswa * $hariEfektifBulanan;
+
+    $absen = Absensi::whereYear('tanggal', $tahun)
+        ->whereMonth('tanggal', $i);
+
+    if ($kelasId) {
+        $absen->where('kelas_id', $kelasId);
+    }
+
+    if ($tingkat) {
+        $absen->whereHas('kelas', function ($q) use ($tingkat) {
+            $q->where('tingkat', $tingkat);
+        });
+    }
+
+    $tidakHadir = (clone $absen)
+    ->whereIn('status', [
+        'Izin',
+        'Sakit',
+        'Alpha'
+    ])
+    ->count();
+
+    $hadir = max(0, $totalHariBelajar - $tidakHadir);
+
+    $persen = $totalHariBelajar > 0
+        ? round(($hadir / $totalHariBelajar) * 100, 2)
+        : 0;
+
+    $grafikBulanan[] = $persen;
+}
 
     return view('rekap.index', compact(
     'kelas',
@@ -152,7 +216,9 @@ $persentaseTotal = $totalKehadiran > 0
 'totalSakit',
 'totalAlpha',
 'totalKehadiran',
-'persentaseTotal'
+'persentaseTotal',
+'grafikBulanan',
+'persentaseKeseluruhan'
 ));
 }
 public function exportExcel(Request $request)
@@ -300,6 +366,26 @@ public function exportPdf(Request $request)
             'persentase' => $persentase,
         ];
     }
+    $namaBulan = [
+    1=>'Januari',
+    2=>'Februari',
+    3=>'Maret',
+    4=>'April',
+    5=>'Mei',
+    6=>'Juni',
+    7=>'Juli',
+    8=>'Agustus',
+    9=>'September',
+    10=>'Oktober',
+    11=>'November',
+    12=>'Desember'
+];
+
+$pdf = Pdf::loadView('rekap.pdf', [
+    'rekapKelas' => $rekapKelas,
+    'bulan' => $namaBulan[$bulan],
+    'tahun' => $tahun,
+]);
 
     $pdf = Pdf::loadView('rekap.pdf', compact(
         'rekapKelas',

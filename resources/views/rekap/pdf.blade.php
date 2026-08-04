@@ -33,14 +33,8 @@
 
 </head>
 
-<body>
 
-<h2>Rekap Absensi Bulanan</h2>
 
-<p>
-Bulan : {{ $bulan }} <br>
-Tahun : {{ $tahun }}
-</p>
 
 <table>
 
@@ -60,7 +54,31 @@ Tahun : {{ $tahun }}
 <th>%</th>
 
 </tr>
+<body>
 
+<div style="text-align:center;">
+
+    <img
+        src="{{ public_path('images/logo-sekolah.jpg') }}"
+        width="75">
+
+</div>
+
+<h2>SMP NEGERI 5 TAMBUN UTARA</h2>
+
+<h3>Monitoring Rekap Absensi Bulanan</h3>
+
+<hr>
+
+<p>
+
+<b>Bulan :</b> {{ $bulan }}<br>
+
+<b>Tahun :</b> {{ $tahun }}<br>
+
+<b>Tanggal Cetak :</b> {{ date('d-m-Y H:i') }}
+
+</p>
 </thead>
 
 <tbody>
@@ -96,6 +114,64 @@ Tahun : {{ $tahun }}
 </tbody>
 
 </table>
+
+<br><br>
+
+<h3>Ringkasan Rekap</h3>
+
+<table>
+
+<tr>
+
+<td><b>Total Hadir</b></td>
+
+<td>{{ collect($rekapKelas)->sum('hadir') }}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Total Izin</b></td>
+
+<td>{{ collect($rekapKelas)->sum('izin') }}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Total Sakit</b></td>
+
+<td>{{ collect($rekapKelas)->sum('sakit') }}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Total Alpha</b></td>
+
+<td>{{ collect($rekapKelas)->sum('alpha') }}</td>
+
+</tr>
+
+</table>
+
+<br><br><br>
+
+<p style="text-align:right;">
+
+Bekasi,
+
+{{ date('d-m-Y') }}
+
+</p>
+
+<br><br>
+
+<p style="text-align:right;">
+
+Administrator
+
+</p>
 
 </body>
 </html>

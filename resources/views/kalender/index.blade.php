@@ -199,19 +199,7 @@ method="POST">
 
 </tr>
 
-                        <td>
-
-                            <a
-href="{{ route('kalender.edit', $item->id) }}"
-class="btn btn-warning btn-sm">
-
-    <i class="bi bi-pencil-square"></i>
-
-</a>
-
-                        </td>
-
-                    </tr>
+                        
 
                 @empty
 

@@ -81,6 +81,46 @@
             </div>
         </div>
 
+        <div class="col-md-3">
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body text-center">
+
+            <h6>Persentase Kehadiran</h6>
+
+            <h2 class="text-success">
+
+                {{ $persentaseKeseluruhan }}%
+
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header">
+
+        <h5 class="mb-0">
+
+            Grafik Persentase Kehadiran Tahun {{ $tahun }}
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <canvas id="grafikAbsensi" height="90"></canvas>
+
+    </div>
+
+</div>
+
     </div>
 
     <div class="alert alert-info mb-4">
@@ -317,28 +357,6 @@
     </span>
 </td>
 
-        <td class="text-warning">
-            {{ $row['izin'] }}
-        </td>
-
-        <td class="text-info">
-            {{ $row['sakit'] }}
-        </td>
-
-        <td class="text-danger">
-            {{ $row['alpha'] }}
-        </td>
-
-        <td>
-
-    <span class="badge bg-success">
-
-        {{ $row['persentase'] }}%
-
-    </span>
-
-</td>
-
     </tr>
 
     @endforeach
@@ -420,5 +438,81 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('grafikAbsensi');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            'Jan','Feb','Mar','Apr','Mei','Jun',
+            'Jul','Agu','Sep','Okt','Nov','Des'
+        ],
+        datasets: [{
+            label: 'Persentase Kehadiran (%)',
+            data: @json($grafikBulanan),
+            backgroundColor: [
+                '#3b82f6','#3b82f6','#3b82f6','#3b82f6',
+                '#3b82f6','#3b82f6','#3b82f6','#3b82f6',
+                '#3b82f6','#3b82f6','#3b82f6','#3b82f6'
+            ],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                display: false
+            },
+
+            tooltip: {
+
+                callbacks: {
+
+                    label: function(context){
+
+                        return context.raw + '%';
+
+                    }
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                max:100,
+
+                ticks:{
+                    callback:function(value){
+                        return value+'%';
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 @endsection
