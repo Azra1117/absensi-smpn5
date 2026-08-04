@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Exports\RekapBulananExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class RekapController extends Controller
 {
@@ -16,6 +17,14 @@ public function index(Request $request)
 {
     $bulan = $request->bulan ?? date('m');
     $tahun = $request->tahun ?? date('Y');
+    dd(
+    DB::connection()->getDatabaseName(),
+    \App\Models\KalenderAkademik::count(),
+    \App\Models\KalenderAkademik::whereYear('tanggal', 2026)
+        ->whereMonth('tanggal', 7)
+        ->where('status', 'Efektif')
+        ->count()
+);
     $hariEfektif = \App\Models\KalenderAkademik::whereYear('tanggal', $tahun)
     ->whereMonth('tanggal', $bulan)
     ->where('status', 'Efektif')
@@ -301,6 +310,14 @@ public function exportPdf(Request $request)
 {
     $bulan = $request->bulan ?? date('m');
     $tahun = $request->tahun ?? date('Y');
+    dd([
+    'database' => DB::connection()->getDatabaseName(),
+    'jumlah_kalender' => \App\Models\KalenderAkademik::count(),
+    'hari_efektif' => \App\Models\KalenderAkademik::whereYear('tanggal', $tahun)
+        ->whereMonth('tanggal', $bulan)
+        ->where('status', 'Efektif')
+        ->count(),
+]);
     $tingkat = $request->tingkat;
     $kelasId = $request->kelas;
 
