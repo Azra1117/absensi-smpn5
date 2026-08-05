@@ -17,7 +17,7 @@ public function index(Request $request)
 {
     $bulan = $request->bulan ?? date('m');
     $tahun = $request->tahun ?? date('Y');
-    $hariEfektif = \App\Models\KalenderAkademik::whereYear('tanggal', $tahun)
+$hariEfektif = \App\Models\KalenderAkademik::whereYear('tanggal', $tahun)
     ->whereMonth('tanggal', $bulan)
     ->where('status', 'Efektif')
     ->count();
@@ -189,11 +189,11 @@ for ($i = 1; $i <= 12; $i++) {
     ])
     ->count();
 
-    $hadir = max(0, $totalHariBelajar - $tidakHadir);
+$hadirBulanan = max(0, $totalHariBelajar - $tidakHadir);
 
-    $persen = $totalHariBelajar > 0
-        ? round(($hadir / $totalHariBelajar) * 100, 2)
-        : 0;
+$persen = $totalHariBelajar > 0
+    ? round(($hadirBulanan / $totalHariBelajar) * 100, 2)
+    : 0;
 
     $grafikBulanan[] = $persen;
 }
