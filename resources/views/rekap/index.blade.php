@@ -42,7 +42,7 @@
                     <div>
                         <small class="text-muted">Hadir</small>
                         <h2 class="fw-bold text-success mt-2">
-                            {{ number_format($hadir) }}
+                            {{ number_format($totalHadir) }}
                         </h2>
                     </div>
 
@@ -57,7 +57,7 @@
                     <div>
                         <small class="text-muted">Alpha</small>
                         <h2 class="fw-bold text-danger mt-2">
-                            {{ number_format($alpha) }}
+                            {{ number_format($totalAlpha) }}
                         </h2>
                     </div>
 
@@ -72,7 +72,7 @@
                     <div>
                         <small class="text-muted">Izin / Sakit</small>
                         <h2 class="fw-bold text-warning mt-2">
-                            {{ number_format($izin + $sakit) }}
+                            {{ number_format($totalIzin + $totalSakit) }}
                         </h2>
                     </div>
 
@@ -91,7 +91,7 @@
 
             <h2 class="text-success">
 
-                {{ $persentaseKeseluruhan }}%
+                {{ $persentaseTotal }}%
 
             </h2>
 
@@ -365,7 +365,7 @@
 
 <tr>
 
-    <td colspan="8" class="text-center text-muted py-5">
+    <td colspan="10"class="text-center text-muted py-5">
 
         Tidak ada data ditemukan
 
