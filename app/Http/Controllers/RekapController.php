@@ -198,6 +198,7 @@ $persen = $totalHariBelajar > 0
     $grafikBulanan[] = $persen;
 }
 
+
     return view('rekap.index', compact(
     'kelas',
     'bulan',
