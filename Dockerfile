@@ -1,17 +1,4 @@
 # ==========================
-# Stage 1 - Build Frontend
-# ==========================
-FROM node:22 AS frontend
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-RUN npm run build
-
-# ==========================
 # Stage 2 - PHP
 # ==========================
 FROM php:8.2-cli
@@ -26,9 +13,12 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_mysql \
+        pdo_pgsql \
+        pgsql \
         gd \
         zip \
         bcmath \
