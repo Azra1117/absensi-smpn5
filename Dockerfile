@@ -44,18 +44,21 @@ RUN composer install --no-dev --optimize-autoloader
 
 COPY --from=frontend /app/public/build ./public/build
 
+# Buat folder dan langsung set permission 777 agar tidak kena permission denied
 RUN mkdir -p storage/framework/cache \
     storage/framework/views \
     storage/framework/sessions \
     storage/framework/testing \
     storage/logs \
-    bootstrap/cache
-
-RUN chmod -R 777 storage bootstrap/cache
+    bootstrap/cache \
+    database && \
+    touch database/database.sqlite && \
+    chmod -R 777 storage bootstrap/cache database
 
 EXPOSE 10000
 
 CMD php artisan config:clear && \
     php artisan cache:clear && \
     php artisan view:clear && \
+    php artisan migrate --force && \
     php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
