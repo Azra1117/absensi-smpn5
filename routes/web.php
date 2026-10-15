@@ -155,3 +155,21 @@ Route::get('/fix-login', function () {
 
     return "SUKSES! User admin sudah dibuat/di-update dengan password: 123456";
 });
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+
+Route::get('/run-migration-sessions', function () {
+    if (!Schema::hasTable('sessions')) {
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+        return "Tabel sessions BERHASIL dibuat!";
+    }
+    return "Tabel sessions sudah ada kok.";
+});
