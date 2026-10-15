@@ -137,3 +137,13 @@ Route::get('/laporan', [LaporanController::class, 'index'])
 Route::get('/siswa', function () {
     return view('siswa.dashboard');
 });
+
+Route::get('/fix-login', function () {
+    $user = \App\Models\User::where('username', 'admin')->first();
+    if ($user) {
+        $user->password = bcrypt('123456');
+        $user->save();
+        return "SUKSES! Password admin sudah diubah jadi 123456.";
+    }
+    return "User admin tidak ditemukan di database.";
+});
