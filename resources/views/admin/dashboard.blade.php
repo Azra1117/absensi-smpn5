@@ -186,7 +186,7 @@ font-size:24px;
     <div>
         <h1 class="dashboard-title">
             👋 Selamat Datang,
-            {{ auth()->user()->nama }}
+            {{ $_SESSION['username'] ?? 'Administrator' }}
         </h1>
 
         <p class="dashboard-subtitle">
