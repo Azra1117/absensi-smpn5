@@ -24,6 +24,7 @@ use App\Models\Absensi;
 */
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('/login', [AuthController::class, 'index']); // Tambahkan baris ini agar akses /login via GET tidak error
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
