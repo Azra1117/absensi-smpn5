@@ -139,11 +139,19 @@ Route::get('/siswa', function () {
 });
 
 Route::get('/fix-login', function () {
-    $user = \App\Models\User::where('username', 'admin')->first();
-    if ($user) {
-        $user->password = bcrypt('123456');
-        $user->save();
-        return "SUKSES! Password admin sudah diubah jadi 123456.";
-    }
-    return "User admin tidak ditemukan di database.";
+    $user = \App\Models\User::firstOrCreate(
+        ['username' => 'admin'],
+        [
+            'nama' => 'Administrator',
+            'password' => bcrypt('123456'),
+            'role' => 'admin',
+            'status' => 1
+        ]
+    );
+    
+    // Jika user sudah ada, pastikan passwordnya di-update jadi 123456
+    $user->password = bcrypt('123456');
+    $user->save();
+
+    return "SUKSES! User admin sudah dibuat/di-update dengan password: 123456";
 });
