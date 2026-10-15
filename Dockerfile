@@ -1,4 +1,17 @@
 # ==========================
+# Stage 1 - Build Frontend
+# ==========================
+FROM node:22 AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+# ==========================
 # Stage 2 - PHP
 # ==========================
 FROM php:8.2-cli
