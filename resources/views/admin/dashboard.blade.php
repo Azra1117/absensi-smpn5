@@ -184,7 +184,7 @@ font-size:24px;
 <div class="dashboard-header">
 
     <div>
-        <h1 class="dashboard-title">
+<h1 class="dashboard-title">
     👋 Selamat Datang,
     {{ optional(Auth::user())->nama ?? 'Administrator' }}
 </h1>
