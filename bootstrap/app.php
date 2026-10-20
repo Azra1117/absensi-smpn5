@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Memaksa percaya pada semua proxy Render (agar HTTPS dan scheme terdeteksi)
+        // Memaksa percaya pada semua proxy Render (agar HTTPS terdeteksi)
         $middleware->trustProxies(
             at: '*',
             headers: Request::HEADER_X_FORWARDED_FOR
@@ -22,9 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 | Request::HEADER_X_FORWARDED_AWS_ELB
         );
 
-        // Mendaftarkan middleware tambahan jika diperlukan untuk keamanan web
+        // Pastikan enkripsi cookie aktif agar session terbaca aman di balik proxy
         $middleware->web(append: [
-            // \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
