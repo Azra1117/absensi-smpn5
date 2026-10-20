@@ -33,21 +33,11 @@ class AuthController extends Controller
     }
 
     // Helper Redirect Role
-    private function redirectBasedOnRole($role)
-    {
-        switch ($role) {
-            case 'admin':
-                return redirect('/admin');
-            case 'guru':
-                return redirect('/guru');
-            case 'staff':
-                return redirect('/staff');
-            case 'siswa':
-                return redirect('/siswa');
-            default:
-                return redirect('/admin');
-        }
-    }
+private function redirectBasedOnRole($role)
+{
+    // Paksa semua langsung ke admin dulu buat testing
+    return redirect('/admin');
+}
 
     // Logout
     public function logout(Request $request)

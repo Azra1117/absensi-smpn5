@@ -11,22 +11,21 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        // Memaksa percaya pada semua proxy Render (agar HTTPS terdeteksi)
-        $middleware->trustProxies(
-            at: '*',
-            headers: Request::HEADER_X_FORWARDED_FOR
-                | Request::HEADER_X_FORWARDED_HOST
-                | Request::HEADER_X_FORWARDED_PORT
-                | Request::HEADER_X_FORWARDED_PROTO
-                | Request::HEADER_X_FORWARDED_AWS_ELB
-        );
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->trustProxies(
+        at: '*',
+        headers: Request::HEADER_X_FORWARDED_FOR
+            | Request::HEADER_X_FORWARDED_HOST
+            | Request::HEADER_X_FORWARDED_PORT
+            | Request::HEADER_X_FORWARDED_PROTO
+            | Request::HEADER_X_FORWARDED_AWS_ELB
+    );
 
-        // Pastikan enkripsi cookie aktif agar session terbaca aman di balik proxy
-        $middleware->web(append: [
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-        ]);
-    })
+    // Pastikan bagian ini aktif (jangan dikomentari)
+    $middleware->web(append: [
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
